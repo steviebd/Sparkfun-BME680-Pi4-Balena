@@ -1,0 +1,6 @@
+Improve the script with Try statements in case of an influxdb error
+
+Improve BOM data and resilience if error logs on pulling data and getting databases
+
+Add a web domain, reverse poxy and SSL certificate for Unifi & Grafana if requiring external access
+

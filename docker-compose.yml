@@ -1,0 +1,39 @@
+version: '2.1'
+
+volumes:
+  influx_data:
+  grafana_data:
+  pihole_data: 
+  dnsmasq_data: 
+  unifi_data:
+
+services:  
+  sensor:
+    build: ./sensor
+    privileged: true
+    restart: unless-stopped
+    depends_on:
+      - influxdb
+    labels:
+      - 'io.balena.features.kernel-modules=1'
+
+  influxdb:
+    restart: unless-stopped
+    image: influxdb:2.0.4
+    volumes:
+      - influx_data:/var/lib/influxdb2
+      - influx_data:/etc/influxdb2
+    ports:
+      - '8086'
+      - '8088'
+
+  grafana:
+    build: ./grafana
+    restart: unless-stopped
+    image: grafana/grafana:7.5.4
+    ports:
+      - '3000'
+    volumes:
+      - 'grafana_data:/var/lib/grafana'
+    environment:
+      - 'GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource'
